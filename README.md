@@ -30,27 +30,28 @@ State transitions are handled using **C# pattern matching** with a clean and con
 | Running       | Stop        | Stopped    |
 | *Other*       | *Any*       | No Change  |
 
-## Code Sample
+## How to Use
+
+You can use the `Car` class like this:
 
 ```csharp
-public class Car
+using System;
+using StateMachine;
+
+class Program
 {
-    public enum State { Stopped, Started, Running }
-    public enum Action { Stop, Start, Accelerate }
-
-    private State state = State.Stopped;
-
-    public State CurrentState => state;
-
-    public void TakeAction(Action action)
+    static void Main()
     {
-        state = (state, action) switch
-        {
-            (State.Stopped, Action.Start) => State.Started,
-            (State.Started, Action.Accelerate) => State.Running,
-            (State.Started, Action.Stop) => State.Stopped,
-            (State.Running, Action.Stop) => State.Stopped,
-            _ => state
-        };
+        var car = new Car();
+        Console.WriteLine($"Initial State: {car.CurrentState}"); // Stopped
+
+        car.TakeAction(Car.Action.Start);
+        Console.WriteLine($"After Start: {car.CurrentState}"); // Started
+
+        car.TakeAction(Car.Action.Accelerate);
+        Console.WriteLine($"After Accelerate: {car.CurrentState}"); // Running
+
+        car.TakeAction(Car.Action.Stop);
+        Console.WriteLine($"After Stop: {car.CurrentState}"); // Stopped
     }
 }
